@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Test">
+      <UniqueIdentifier>{abc38729-f418-41b4-acd7-327c48629f04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container">
+      <UniqueIdentifier>{4d1d1214-ef82-4807-bec3-94e57e53eb59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithm">
+      <UniqueIdentifier>{aa476072-8d60-4266-93c4-a886cb197dd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{5b4363e5-56d9-4d58-b320-a4370842f81a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="algorithm_test.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="container_test.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="index_.cpp">
+      <Filter>Container</Filter>
+    </ClCompile>
+    <ClCompile Include="z_order.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="index_.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="subnet_shortest_path.cuh">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="z_order.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="object.cuh">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda_guard.cuh">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="gtest_prod.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="subnet_shortest_path.cu">
+      <Filter>Algorithm</Filter>
+    </CudaCompile>
+    <CudaCompile Include="object.cu">
+      <Filter>Container</Filter>
+    </CudaCompile>
+    <CudaCompile Include="cuda_guard.cu">
+      <Filter>Util</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>
