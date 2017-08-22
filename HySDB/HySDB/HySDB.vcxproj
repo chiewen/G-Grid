@@ -167,6 +167,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="container_test.cpp" />
     <ClCompile Include="index_.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object_index.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -177,6 +178,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="gtest_prod.h" />
     <ClInclude Include="index_.h" />
     <ClInclude Include="object.cuh" />
+    <ClInclude Include="object_index.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="subnet_shortest_path.cuh" />
     <ClInclude Include="targetver.h" />

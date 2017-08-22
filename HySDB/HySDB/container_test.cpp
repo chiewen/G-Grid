@@ -105,4 +105,5 @@ TEST_F(ObjectsTest, Initialize) {
 		Objects::Step();
 		test_edge();
 	}
+
 }
