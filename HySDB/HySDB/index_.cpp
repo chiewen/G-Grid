@@ -6,6 +6,8 @@ using namespace std;
 
 Index::Cell Index::grid_[Index::kCellNum];
 
+std::vector<int> Index::edge_cell_map_;
+
 int Index::vertex_num;
 
 int Index::VertexNumInCell() { return kMaxVerticesPerCell - rand() % (kMaxVerticesPerCell / 2); }
@@ -74,6 +76,16 @@ void Index::Initialize() {
 			}
 			vertex.edge_num_ += edge_to_neighbors;
 			grid_[i].edge_num += edge_to_neighbors;
+		}
+	}
+
+	//indexing edge to cell
+	edge_cell_map_.assign(edge_id, 0);
+	for (int i = 0; i < kCellNum; ++i) {
+		for (int j = 0; j < grid_[i].vertex_num; ++j) {
+			for (int k = 0; k < grid_[i].vertex_[j].edge_num_; ++k) {
+				edge_cell_map_[grid_[i].vertex_[j].edges_[k].id_] = i;
+			}	
 		}
 	}
 }

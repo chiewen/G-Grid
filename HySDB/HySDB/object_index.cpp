@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "object_index.h"
 
-ObjectIndex::CellMap ObjectIndex::object_index_[];
+ObjectIndex::CellMap ObjectIndex::index_[];
 
 void ObjectIndex::initialize() {
-	memset(object_index_, 0, sizeof(object_index_));
+	memset(index_, 0, sizeof(index_));
 }
 
-void ObjectIndex::update(int object_id, int cell_id) {
-	CellMap& cm = object_index_[object_id];
-	cm.map[cm.edge_id_ / sizeof(int)] = 0;
-
-	cm.map[cell_id / sizeof(int)] = 1;
+void ObjectIndex::update(int object_id, int edge_id) {
+	CellMap& cm = index_[object_id];
+	cm.map[cm.edge_id_ / sizeof(int) / 8] = 0;
+	int cell_id = Index::edge_cell_map_[edge_id];
+	cm.map[cell_id / sizeof(int) / 8] = 1 << cell_id % (sizeof(int) * 8);
 }

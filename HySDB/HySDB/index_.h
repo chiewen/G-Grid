@@ -14,7 +14,7 @@ public:
 	static const int kCellNum = 1 << 4;
 	static const int kMaxVerticesPerCell = 1 << 3;
 	static const int kMaxEdgesPerVertex = 1 << 3;
-
+	
 	static int vertex_num;
 
 	struct Cell {
@@ -35,6 +35,7 @@ public:
 	};
 
 	static Cell grid_[kCellNum];
+	static std::vector<int> edge_cell_map_;
 
 	static std::vector<int> Neighbors(int cell_id);
 	static void Initialize();

@@ -90,6 +90,7 @@ public:
 			auto& e = Index::grid_[o.cell_id].vertex_[o.vertex_pos_].edges_[o.edge_pos_];
 			ASSERT_EQ(Objects::objects_[i].edge_id_, e.id_);
 			ASSERT_GE(e.length_, o.position_);
+			ASSERT_EQ(o.cell_id, Index::edge_cell_map_[e.id_]);
 		}
 	}
 };
