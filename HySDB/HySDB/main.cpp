@@ -9,15 +9,9 @@ void google_test(int argc, char** argv) {
 	RUN_ALL_TESTS();
 }
 
-void normal_run() {
-	CudaGuard guard;
-	Objects::Initialize();
-}
-
 int main(int argc, char* argv[])
 {
 	google_test(argc, argv);
-	normal_run();
 	return 0;
 }
 
