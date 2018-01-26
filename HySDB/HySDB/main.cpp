@@ -17,7 +17,7 @@ void normal_run() {
 int main(int argc, char* argv[])
 {
 	google_test(argc, argv);
-//	normal_run();
+	normal_run();
 	return 0;
 }
 

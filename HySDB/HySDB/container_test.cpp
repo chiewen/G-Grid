@@ -8,16 +8,16 @@
 
 using namespace std;
 
-TEST(Index, Common) {
-	EXPECT_EQ(Index::kCellNum, 16);
-	EXPECT_EQ(Index::kMaxVerticesPerCell, 8);
-	EXPECT_EQ(Index::kMaxEdgesPerVertex, 8);
+TEST(G_Grid, Common) {
+	EXPECT_EQ(G_Grid::kCellNum, 16);
+	EXPECT_EQ(G_Grid::kMaxVerticesPerCell, 8);
+	EXPECT_EQ(G_Grid::kMaxEdgesPerVertex, 8);
 	EXPECT_EQ(sizeof(int), 4);
-	EXPECT_EQ(sizeof(Index::grid_),
+	EXPECT_EQ(sizeof(G_Grid::grid_),
 		sizeof(int) *
-		Index::kCellNum * (2 +
-			Index::kMaxVerticesPerCell * (2 +
-				Index::kMaxEdgesPerVertex * 4)));
+		G_Grid::kCellNum * (2 +
+			G_Grid::kMaxVerticesPerCell * (2 +
+				G_Grid::kMaxEdgesPerVertex * 4)));
 }
 
 TEST(Index, ZOrder) {
@@ -40,23 +40,23 @@ TEST(Index, ZOrder) {
 }
 
 TEST(Index, Initialization) {
-	Index::Initialize();
+	G_Grid::Generate_Randomly();
 
 	//vertex number
 	int vertex_sum = 0;
-	for (auto& cell : Index::grid_) {
+	for (auto& cell : G_Grid::grid_) {
 		int count = count_if(begin(cell.vertex_), end(cell.vertex_),
-		                     [=](const Index::Cell::Vertex& v) {
+		                     [=](const G_Grid::Cell::Vertex& v) {
 		                     return v.id_ != 0;
 	                     });
 		EXPECT_EQ(cell.vertex_num, count);
 		vertex_sum += count;
 	}
-	EXPECT_EQ(vertex_sum, Index::vertex_num);
+	EXPECT_EQ(vertex_sum, G_Grid::vertex_num);
 
 	//edges not pointing to their containing vertices
-	for (int j = 0; j < Index::kCellNum; ++j) {
-		auto& cell = Index::grid_[j];
+	for (int j = 0; j < G_Grid::kCellNum; ++j) {
+		auto& cell = G_Grid::grid_[j];
 		for (int i = 0; i < cell.vertex_num; ++i) {
 			auto& vertex = cell.vertex_[i];
 			if (vertex.id_ != 0)
@@ -68,13 +68,13 @@ TEST(Index, Initialization) {
 	}
 
 	//edges number 
-	for (auto& cell : Index::grid_) {
-		int edge_num_c = std::accumulate(std::begin(cell.vertex_), std::end(cell.vertex_), 0, [](int sum, Index::Cell::Vertex& vertex) {
+	for (auto& cell : G_Grid::grid_) {
+		int edge_num_c = std::accumulate(std::begin(cell.vertex_), std::end(cell.vertex_), 0, [](int sum, G_Grid::Cell::Vertex& vertex) {
 		                                 return sum + vertex.edge_num_;
 	                                 });
 		EXPECT_EQ(edge_num_c, cell.edge_num);
 		for (auto& vertex : cell.vertex_) {
-			int edge_num_v = std::count_if(std::begin(vertex.edges_), std::end(vertex.edges_), [=](Index::Cell::Vertex::Edge& edge) {
+			int edge_num_v = std::count_if(std::begin(vertex.edges_), std::end(vertex.edges_), [=](G_Grid::Cell::Vertex::Edge& edge) {
 			                               return edge.id_ != 0;
 		                               });
 			EXPECT_EQ(vertex.edge_num_, edge_num_v);
@@ -87,10 +87,10 @@ public:
 	void test_edge() const {
 		for (int i = 0; i < Objects::kTotalObjectNum; ++i) {
 			auto& o = Objects::objects_[i];
-			auto& e = Index::grid_[o.cell_id].vertex_[o.vertex_pos_].edges_[o.edge_pos_];
+			auto& e = G_Grid::grid_[o.cell_id].vertex_[o.vertex_pos_].edges_[o.edge_pos_];
 			ASSERT_EQ(Objects::objects_[i].edge_id_, e.id_);
 			ASSERT_GE(e.length_, o.position_);
-			ASSERT_EQ(o.cell_id, Index::edge_cell_map_[e.id_]);
+			ASSERT_EQ(o.cell_id, G_Grid::edge_cell_map_[e.id_]);
 		}
 	}
 };

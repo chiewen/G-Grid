@@ -9,7 +9,6 @@ void ObjectIndex::initialize() {
 
 void ObjectIndex::update(int object_id, int edge_id) {
 	CellMap& cm = index_[object_id];
-	cm.map[cm.edge_id_ / sizeof(int) / 8] = 0;
-	int cell_id = Index::edge_cell_map_[edge_id];
-	cm.map[cell_id / sizeof(int) / 8] = 1 << cell_id % (sizeof(int) * 8);
+	cm.edge_id_ = edge_id;
+	cm.cell_id_ = G_Grid::edge_cell_map_[edge_id];
 }

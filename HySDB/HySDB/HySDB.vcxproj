@@ -110,6 +110,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <Include>%GTEST_DIR%;%GTEST_DIR%/include;D:\Work\lib\googletest-master\googletest\include;%(Include)</Include>
+      <CodeGeneration>compute_50,sm_50</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -159,12 +160,14 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="cuda_guard.cu" />
+    <CudaCompile Include="message_processor.cu" />
     <CudaCompile Include="object.cu" />
     <CudaCompile Include="subnet_shortest_path.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="algorithm_test.cpp" />
     <ClCompile Include="container_test.cpp" />
+    <ClCompile Include="cuda_stream_controller.cpp" />
     <ClCompile Include="index_.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object_index.cpp" />
@@ -174,9 +177,12 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="z_order.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cuda_stream_controller.h" />
     <ClInclude Include="cuda_guard.cuh" />
     <ClInclude Include="gtest_prod.h" />
     <ClInclude Include="index_.h" />
+    <ClInclude Include="message_processor.cuh" />
+    <ClInclude Include="now.h" />
     <ClInclude Include="object.cuh" />
     <ClInclude Include="object_index.h" />
     <ClInclude Include="stdafx.h" />

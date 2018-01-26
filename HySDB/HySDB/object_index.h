@@ -4,11 +4,10 @@
 
 class ObjectIndex {
 public:
-	static const int kMapSize = std::max(static_cast<int>((Index::kCellNum / sizeof(int)) / 8), 1);
 	struct CellMap {
 		int edge_id_;
 		int position_;
-		int map[kMapSize];
+		int cell_id_;
 	};
 	static CellMap index_[Objects::kTotalObjectNum];
 
