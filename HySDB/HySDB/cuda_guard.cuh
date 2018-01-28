@@ -4,7 +4,7 @@
 #include <curand_kernel.h>
 
 struct CudaGuard {
-	static Index::Cell* pd_grid_;
+	static G_Grid::Cell* pd_grid_;
 	static Object* pd_objects_;
 	static curandState* pd_curand_state_;
 

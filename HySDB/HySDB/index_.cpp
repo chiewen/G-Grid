@@ -4,20 +4,23 @@
 
 using namespace std;
 
-Index::Cell Index::grid_[Index::kCellNum];
+G_Grid::Cell G_Grid::grid_[G_Grid::kCellNum];
 
-int Index::vertex_num;
+std::vector<int> G_Grid::edge_cell_map_;
 
-int Index::VertexNumInCell() { return kMaxVerticesPerCell - rand() % (kMaxVerticesPerCell / 2); }
+int G_Grid::vertex_num;
 
-int Index::EdgeNumInVertex() { return kMaxEdgesPerVertex - rand() % (kMaxEdgesPerVertex / 2); }
+int G_Grid::VertexNumInCell() { return kMaxVerticesPerCell - rand() % (kMaxVerticesPerCell / 2); }
 
-int Index::EdgeLength() { return rand() % 200 + 30; }
+int G_Grid::EdgeNumInVertex() { return kMaxEdgesPerVertex - rand() % (kMaxEdgesPerVertex / 2); }
 
-int Index::EdgeNumToNeighbors() { return (rand() % kMaxEdgesPerVertex / 3); }
+int G_Grid::EdgeLength() { return rand() % 200 + 30; }
 
-void Index::Initialize() {
-	//clear all data in Index
+int G_Grid::EdgeNumToNeighbors() { return (rand() % kMaxEdgesPerVertex / 3); }
+
+//This methods provides a way to generate an G_Grid randomly.
+void G_Grid::Generate_Randomly() {
+	//clear all data in G_Grid
 	memset(&grid_, 0, sizeof(grid_));
 	vertex_num = 0;
 
@@ -76,9 +79,19 @@ void Index::Initialize() {
 			grid_[i].edge_num += edge_to_neighbors;
 		}
 	}
+
+	//indexing edge to cell
+	edge_cell_map_.assign(edge_id, 0);
+	for (int i = 0; i < kCellNum; ++i) {
+		for (int j = 0; j < grid_[i].vertex_num; ++j) {
+			for (int k = 0; k < grid_[i].vertex_[j].edge_num_; ++k) {
+				edge_cell_map_[grid_[i].vertex_[j].edges_[k].id_] = i;
+			}	
+		}
+	}
 }
 
-std::vector<int> Index::Neighbors(int cell_id) {
+std::vector<int> G_Grid::Neighbors(int cell_id) {
 	auto result = ZOrder::NeighborsOf(cell_id);
 	result.erase(std::remove_if(result.begin(), result.end(), [](int r) {
 	                            return r < 0 || r >= kCellNum;

@@ -3,7 +3,7 @@
 
 class ZOrder {
 	FRIEND_TEST(Index, ZOrder);
-	friend class Index;
+	friend class G_Grid;
 
 	static const int kLength = 256;
 	static const int z_order_x[];

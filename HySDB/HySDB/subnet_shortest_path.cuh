@@ -18,11 +18,11 @@ public:
 
 	SubnetBF() {}
 
-	static void BfOnCpu(int* cells, int cell_num, int start_cell,
+	static void handle_unresolved(int* cells, int cell_num, int start_cell,
 	                    int start_vertex, int start_edge, int distance,
 	                    SBfResult* result_num, int edge_num);
 
-	static void BfOnGpu(int* cells, int cell_num, int start_cell,
+	static void find_first_k(int* cells, int cell_num, int start_cell,
 	                    int start_vertex, int start_edge, int distance,
 	                    SBfResult* result_num, int edge_num);
 
