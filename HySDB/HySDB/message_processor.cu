@@ -48,7 +48,7 @@ __global__ void xsfl_msg_knl(int n, MessageC* A, MessageC* T) {
 	}
 }
 
-__global__ void clct_knl(int n, int* o_num, MessageC *R, MessageC* T) {
+__global__ void clct_knl(int n, int* o_num, MessageC* R, MessageC* T) {
 	int id = threadIdx.x + blockIdx.x * blockDim.x;
 	int bundle_id = id / MessageBucket::kRhoB;
 
@@ -58,7 +58,7 @@ __global__ void clct_knl(int n, int* o_num, MessageC *R, MessageC* T) {
 			m = T[i];
 		}
 		if (m.oid != 0) {
-			for (int j = m.cid * G_Grid::kMaxObjectsPerCell; j < m.cid * G_Grid::kMaxObjectsPerCell + G_Grid::kMaxObjectsPerCell ; ++j) {
+			for (int j = m.cid * G_Grid::kMaxObjectsPerCell; j < m.cid * G_Grid::kMaxObjectsPerCell + G_Grid::kMaxObjectsPerCell; ++j) {
 				if (R[j].oid == 0) R[j] = m;
 			}
 		}
@@ -68,11 +68,13 @@ __global__ void clct_knl(int n, int* o_num, MessageC *R, MessageC* T) {
 MessageBucket* MessageLists::lists_[G_Grid::kCellNum];
 
 void MessageLists::MessageCleaning(std::vector<int> lists, int message_out_num, MessageC* messages) {
+	int now = Now::now();
+
+	int total = 0;
 	int n_to_clean = std::accumulate(lists.begin(), lists.end(), 0,
-	                                 [](int t, int i) -> int {
+	                                 [&total, now](int t, int i) -> int {
 	                                 auto pm = lists_[i];
-	                                 int total = 0;
-	                                 while (pm != nullptr && (Now::now() - pm->t < kTimeDelta)) {
+	                                 while (pm != nullptr && (now - pm->t < kTimeDelta)) {
 		                                 //TODO delete if obsolete
 		                                 total++;
 		                                 pm = pm->p;
@@ -88,6 +90,12 @@ void MessageLists::MessageCleaning(std::vector<int> lists, int message_out_num, 
 	cudaMalloc(&d_T, sizeof(MessageC) * Objects::kTotalObjectNum * n_to_clean);
 	cudaMalloc(&d_R, sizeof(MessageC) * G_Grid::kCellNum * G_Grid::kMaxObjectsPerCell);
 	cudaMallocHost(&h_R, sizeof(MessageC) * G_Grid::kCellNum * G_Grid::kMaxObjectsPerCell);
+
+	int sum = 0;
+	for (auto i = lists.begin(); i < lists.end(); ++i) {
+		(*(reinterpret_cast<MessageBucket*>(h_buckets) + sum++)) = *lists_[*i];
+	}
+
 	cudaMemcpy(d_buckets, h_buckets, sizeof(MessageC) * MessageBucket::kRhoB * n_to_clean, cudaMemcpyHostToDevice);
 
 	cudaSetDevice(0);
@@ -95,9 +103,11 @@ void MessageLists::MessageCleaning(std::vector<int> lists, int message_out_num, 
 	dim3 block(128);
 	dim3 grid(n_to_clean / 128);
 
-	xsfl_msg_knl << <grid, block, 0, CudaStreamControler::getStream()>> >(n_to_clean, d_buckets, d_T);
+	auto ustream_st = CudaStreamControler::getStream();
 
-	clct_knl << <dim3(Objects::kTotalObjectNum / 128), block, 0, CudaStreamControler::getStream()>> >(n_to_clean, d_m, d_R, d_T);
+	xsfl_msg_knl << <grid, block, 0, ustream_st>> >(n_to_clean, d_buckets, d_T);
+
+	clct_knl << <dim3(Objects::kTotalObjectNum / 128), block, 0, ustream_st>> >(n_to_clean, d_m, d_R, d_T);
 
 	cudaDeviceSynchronize();
 
